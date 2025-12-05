@@ -132,21 +132,33 @@ function renderizarErro() {
 }
 
 function rotear() {
-  let pathname = window.location.pathname
-  const search = window.location.search
-
-  // Remove barra inicial e final
-  pathname = pathname.replace(/^\/|\/$/g, "")
-
   let nome = null
 
-  if (pathname.includes("natal/")) {
+  // Tentar obter do pathname (GitHub Pages: /repo/index.html?natal/amanda)
+  const pathname = window.location.pathname
+  const search = window.location.search
+  const hash = window.location.hash
+
+  // Verificar no search/query string (ex: ?natal/amanda)
+  if (search.includes("natal/")) {
+    nome = search.split("natal/")[1]?.split("&")[0]
+  }
+  // Verificar no hash (ex: #natal/amanda)
+  else if (hash.includes("natal/")) {
+    nome = hash.split("natal/")[1]?.split("&")[0]
+  }
+  // Verificar no pathname (ex: /natal/amanda ou /repo/natal/amanda)
+  else if (pathname.includes("natal/")) {
     nome = pathname.split("natal/")[1]
-  } else if (search.includes("natal/")) {
-    nome = search.split("natal/")[1]
   }
 
-  console.log("[v0] Rota detectada:", { pathname, search, nome })
+  // Se encontrou um nome, limpar e validar
+  if (nome) {
+    nome = nome.trim().toLowerCase()
+    console.log("[v0] Nome extraído da URL:", nome)
+  }
+
+  console.log("[v0] Rota detectada:", { pathname, search, hash, nome })
 
   if (nome) {
     renderizarPaginaResultado(nome)
