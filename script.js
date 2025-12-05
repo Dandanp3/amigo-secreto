@@ -6,11 +6,11 @@ const sorteio = {
   sandro: "Lucas",
   mayara: "Malu",
   milson: "Amanda",
-  julia: "Elis",
+  júlia: "Lili",
   marcos: "Nadinho",
-  zeza: "Julia",
+  zeza: "Júlia",
   samuel: "Andressa",
-  Elis: "Mayara",
+  lili: "Mayara",
   nadinho: "Allyson",
   xande: "Daniel",
   malu: "Cícera",
@@ -31,6 +31,14 @@ const frases = [
   "Só você sabe! 🌟",
   "Misterioso até o fim! 🎅",
 ]
+
+function normalizarNome(nome) {
+  return nome
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+}
 
 function adicionarFlocos() {
   const app = document.getElementById("app")
@@ -78,9 +86,12 @@ function renderizarPaginaPrincipal() {
 }
 
 function renderizarPaginaResultado(nome) {
-  const pessoa = Object.keys(sorteio).find((chave) => chave.toLowerCase() === nome.toLowerCase())
+  const nomeNormalizado = normalizarNome(nome)
+  const pessoa = Object.keys(sorteio).find((chave) => normalizarNome(chave) === nomeNormalizado)
 
   if (!pessoa) {
+    console.log("[v0] Pessoa não encontrada. Nome procurado:", nomeNormalizado)
+    console.log("[v0] Nomes disponíveis:", Object.keys(sorteio).map(normalizarNome))
     renderizarErro()
     return
   }
@@ -152,13 +163,13 @@ function rotear() {
     nome = pathname.split("natal/")[1]
   }
 
-  // Se encontrou um nome, limpar e validar
   if (nome) {
-    nome = nome.trim().toLowerCase()
-    console.log("[v0] Nome extraído da URL:", nome)
+    nome = nome.trim()
+    console.log("[v0] Nome extraído da URL (original):", nome)
+    console.log("[v0] Nome normalizado:", normalizarNome(nome))
   }
 
-  console.log("[v0] Rota detectada:", { pathname, search, hash, nome })
+  console.log("[v0] Rota detectada - pathname:", pathname, "search:", search, "hash:", hash)
 
   if (nome) {
     renderizarPaginaResultado(nome)
