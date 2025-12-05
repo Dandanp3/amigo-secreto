@@ -148,19 +148,21 @@ function rotear() {
 
   // Verificar no search/query string (ex: ?natal/amanda)
   if (search.includes("natal/")) {
-    nome = search.split("natal/")[1]?.split("&")[0]?.toLowerCase()
+    nome = search.split("natal/")[1]?.split("&")[0]?.toLowerCase().trim()
   }
   // Verificar no hash (ex: #natal/amanda)
   else if (hash.includes("natal/")) {
-    nome = hash.split("natal/")[1]?.split("&")[0]?.toLowerCase()
+    nome = hash.split("natal/")[1]?.split("&")[0]?.toLowerCase().trim()
   }
   // Verificar no pathname (ex: /natal/amanda ou /repo/natal/amanda)
   else if (pathname.includes("natal/")) {
-    nome = pathname.split("natal/")[1]?.toLowerCase()
+    nome = pathname.split("natal/")[1]?.toLowerCase().trim()
   }
 
-  if (nome) {
-    nome = nome.trim()
+  console.log("[v0] Nome procurado:", nome)
+  console.log("[v0] Nomes disponíveis:", Object.keys(sorteio))
+
+  if (nome && sorteio[nome]) {
     renderizarPaginaResultado(nome)
   } else {
     renderizarPaginaPrincipal()
