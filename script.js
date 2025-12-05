@@ -89,9 +89,17 @@ function renderizarPaginaResultado(nome) {
   const nomeNormalizado = normalizarNome(nome)
   const pessoa = Object.keys(sorteio).find((chave) => normalizarNome(chave) === nomeNormalizado)
 
+  console.log("[v0] ========== DEBUG ROTEAMENTO ==========")
+  console.log("[v0] Nome original da URL:", nome)
+  console.log("[v0] Nome normalizado:", nomeNormalizado)
+  console.log(
+    "[v0] Chaves disponíveis normalizadas:",
+    Object.keys(sorteio).map((chave) => normalizarNome(chave)),
+  )
+  console.log("[v0] Pessoa encontrada:", pessoa)
+  console.log("[v0] =====================================")
+
   if (!pessoa) {
-    console.log("[v0] Pessoa não encontrada. Nome procurado:", nomeNormalizado)
-    console.log("[v0] Nomes disponíveis:", Object.keys(sorteio).map(normalizarNome))
     renderizarErro()
     return
   }
