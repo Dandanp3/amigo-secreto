@@ -1,0 +1,345 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #fce7d5 0%, #f5d5c8 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Decorações de flocos de neve */
+.snowflake {
+  position: fixed;
+  top: -10px;
+  color: #87ceeb;
+  font-size: 1.5em;
+  opacity: 0.8;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.snowflake-left {
+  left: 5%;
+  animation: fall 10s linear infinite;
+}
+
+.snowflake-left-2 {
+  left: 15%;
+  animation: fall 12s linear infinite 2s;
+}
+
+.snowflake-center {
+  left: 50%;
+  animation: fall 14s linear infinite 1s;
+}
+
+.snowflake-right {
+  right: 10%;
+  animation: fall 11s linear infinite 3s;
+}
+
+.snowflake-right-2 {
+  right: 20%;
+  animation: fall 13s linear infinite 1.5s;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+/* Decorações */
+.decoration {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tree-left {
+  left: 20px;
+  top: 40px;
+  font-size: 4em;
+}
+
+.tree-center {
+  left: 50%;
+  top: 80px;
+  transform: translateX(-50%);
+  font-size: 3em;
+}
+
+.santa-left {
+  left: 30px;
+  bottom: 100px;
+  font-size: 3em;
+}
+
+.gift-right {
+  right: 30px;
+  bottom: 120px;
+  font-size: 3em;
+}
+
+.girl-right {
+  right: 50px;
+  top: 60px;
+  font-size: 2.5em;
+}
+
+/* Container principal */
+.container {
+  background: white;
+  border-radius: 30px;
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  z-index: 2;
+  position: relative;
+}
+
+/* Página inicial */
+.welcome-page {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.title {
+  font-size: 3.5em;
+  font-weight: 900;
+  color: #dc143c;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+  font-size: 1.8em;
+  color: #1a8c47;
+  font-weight: 600;
+  margin-top: -10px;
+}
+
+.divider {
+  height: 4px;
+  background: linear-gradient(90deg, #dc143c, #ffd700, #1a8c47);
+  border-radius: 2px;
+  width: 150px;
+  margin: 20px auto;
+}
+
+.tagline {
+  font-size: 1.1em;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+/* Página de resultado */
+.result-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card-red {
+  background: #dc143c;
+  border-radius: 20px;
+  padding: 40px 30px;
+  color: white;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(220, 20, 60, 0.3);
+}
+
+.gift-icon {
+  font-size: 4em;
+  margin-bottom: 15px;
+}
+
+.greeting {
+  font-size: 1.6em;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.greeting-message {
+  font-size: 1.1em;
+  opacity: 0.95;
+  font-weight: 300;
+}
+
+.card-white {
+  background: #f9f9f9;
+  border: 2px solid #dc143c;
+  border-radius: 20px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 180px;
+  justify-content: center;
+}
+
+.question {
+  font-size: 1.1em;
+  color: #333;
+  font-weight: 500;
+}
+
+.btn-reveal {
+  background: #1a8c47;
+  color: white;
+  border: none;
+  padding: 16px 40px;
+  font-size: 1.1em;
+  font-weight: 700;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 5px 15px rgba(26, 140, 71, 0.3);
+}
+
+.btn-reveal:hover {
+  background: #157a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(26, 140, 71, 0.4);
+}
+
+.btn-reveal:active {
+  transform: translateY(0);
+}
+
+.answer {
+  font-size: 2em;
+  font-weight: 900;
+  color: #dc143c;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.secret-message {
+  font-size: 0.95em;
+  color: #888;
+  font-style: italic;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+.error-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.error-icon {
+  font-size: 3em;
+}
+
+.error-title {
+  font-size: 1.5em;
+  color: #dc143c;
+  font-weight: 700;
+}
+
+.error-message {
+  font-size: 1em;
+  color: #666;
+}
+
+/* Responsivo para celular */
+@media (max-width: 480px) {
+  .container {
+    padding: 30px 20px;
+    border-radius: 25px;
+  }
+
+  .title {
+    font-size: 2.5em;
+  }
+
+  .subtitle {
+    font-size: 1.4em;
+  }
+
+  .card-red {
+    padding: 30px 20px;
+    min-height: 220px;
+  }
+
+  .gift-icon {
+    font-size: 3em;
+  }
+
+  .greeting {
+    font-size: 1.4em;
+  }
+
+  .greeting-message {
+    font-size: 1em;
+  }
+
+  .question {
+    font-size: 1em;
+  }
+
+  .answer {
+    font-size: 1.7em;
+  }
+
+  .btn-reveal {
+    padding: 14px 30px;
+    font-size: 1em;
+  }
+
+  .tree-left,
+  .santa-left,
+  .gift-right,
+  .girl-right,
+  .tree-center {
+    display: none;
+  }
+
+  .snowflake {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 25px 15px;
+  }
+
+  .title {
+    font-size: 2em;
+  }
+
+  .subtitle {
+    font-size: 1.2em;
+  }
+
+  .card-red {
+    padding: 25px 15px;
+  }
+}
