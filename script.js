@@ -42,6 +42,8 @@ function normalizarNome(nome) {
 
 function adicionarFlocos() {
   const app = document.getElementById("app")
+  if (!app) return; // Segurança caso o app não exista ainda
+  
   const posicoes = ["left: 5%", "left: 15%", "left: 50%", "right: 10%", "right: 20%"]
 
   posicoes.forEach((pos, index) => {
@@ -55,6 +57,7 @@ function adicionarFlocos() {
 
 function adicionarDecoracoes() {
   const app = document.getElementById("app")
+  if (!app) return;
 
   const decoracoes = [
     { classe: "tree-left", emoji: "🎄" },
@@ -74,6 +77,8 @@ function adicionarDecoracoes() {
 
 function renderizarPaginaPrincipal() {
   const container = document.querySelector(".container")
+  if (!container) return;
+  
   container.innerHTML = `
         <div class="welcome-page">
             <h1 class="title">AMIGO SECRETO</h1>
@@ -94,10 +99,11 @@ function renderizarPaginaResultado(nome) {
   }
 
   const tirou = pessoa
-  const frase = frases[Math.floor(Math.random() * frases.length)]
   const nomePessoa = nome.charAt(0).toUpperCase() + nome.slice(1)
 
   const container = document.querySelector(".container")
+  if (!container) return;
+
   container.innerHTML = `
         <div class="result-page">
             <div class="card-red">
@@ -117,7 +123,8 @@ function renderizarPaginaResultado(nome) {
     `
 }
 
-function revelarResposta(nome, botao) {
+// Tornando a função global para o onclick funcionar
+window.revelarResposta = function(nome, botao) {
   const answer = document.getElementById("answer")
   const message = document.getElementById("message")
 
@@ -130,11 +137,15 @@ function revelarResposta(nome, botao) {
 
 function renderizarErro() {
   const container = document.querySelector(".container")
+  if (!container) return;
+
   container.innerHTML = `
         <div class="error-page">
             <div class="error-icon">❌</div>
             <div class="error-title">Página Não Encontrada</div>
             <div class="error-message">Desculpe, este link não é válido.<br>Verifique se o nome está correto!</div>
+            <br>
+            <a href="/" style="text-decoration: underline; color: #fff;">Voltar ao início</a>
         </div>
     `
 }
@@ -142,29 +153,63 @@ function renderizarErro() {
 function rotear() {
   let nome = null
 
+  // Pega a URL completa
   const pathname = window.location.pathname
   const search = window.location.search
   const hash = window.location.hash
+  
+  let rawName = null;
 
-  // Verificar no search/query string (ex: ?natal/amanda)
+  // Lógica de extração mais robusta
   if (search.includes("natal/")) {
-    nome = search.split("natal/")[1]?.split("&")[0]?.toLowerCase().trim()
-  }
-  // Verificar no hash (ex: #natal/amanda)
-  else if (hash.includes("natal/")) {
-    nome = hash.split("natal/")[1]?.split("&")[0]?.toLowerCase().trim()
-  }
-  // Verificar no pathname (ex: /natal/amanda ou /repo/natal/amanda)
-  else if (pathname.includes("natal/")) {
-    nome = pathname.split("natal/")[1]?.toLowerCase().trim()
+    rawName = search.split("natal/")[1];
+  } else if (hash.includes("natal/")) {
+    rawName = hash.split("natal/")[1];
+  } else if (pathname.includes("natal/")) {
+    rawName = pathname.split("natal/")[1];
   }
 
-  console.log("[v0] Nome procurado:", nome)
-  console.log("[v0] Nomes disponíveis:", Object.keys(sorteio))
+  // Limpeza profunda do nome
+  if (rawName) {
+    // 1. Remove parâmetros extras do Google ou Facebook (ex: &fbclid=...)
+    rawName = rawName.split("&")[0];
+    
+    // 2. Decodifica caracteres de URL (ex: %20 vira espaço)
+    try {
+        rawName = decodeURIComponent(rawName);
+    } catch (e) {
+        console.error("Erro ao decodificar URI", e);
+    }
 
-  if (nome && sorteio[nome]) {
-    renderizarPaginaResultado(nome)
+    // 3. Remove caracteres especiais, mantém apenas letras e números
+    // Isso remove a barra "/" final se ela existir
+    nome = rawName
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+            .replace(/[^a-z0-9]/g, "")       // Remove símbolos (incluindo /)
+            .trim();
+  }
+
+  console.log("--- DEBUG ---");
+  console.log("URL bruta:", window.location.href);
+  console.log("Nome extraído:", rawName);
+  console.log("Nome limpo:", nome);
+  console.log("Encontrado no sorteio?", !!sorteio[nome]);
+  console.log("-------------");
+
+  // Roteamento Final
+  if (nome) {
+    // Se extraiu um nome, verifica se existe
+    if (sorteio[nome]) {
+        renderizarPaginaResultado(nome)
+    } else {
+        // Se tem nome na URL mas não tá na lista -> ERRO
+        console.warn("Nome não encontrado na lista:", nome);
+        renderizarErro()
+    }
   } else {
+    // Se não tem nome na URL -> HOME
     renderizarPaginaPrincipal()
   }
 }
@@ -176,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
   rotear()
 })
 
-// Atualizar ao mudar a URL
+// Atualizar ao mudar a URL (voltar/avançar)
 window.addEventListener("popstate", rotear)
 
 // Estilo para animação
