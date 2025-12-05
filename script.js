@@ -151,9 +151,14 @@ function renderizarErro() {
 }
 
 function rotear() {
+  console.log("[v0] ========== INICIANDO ROTEAMENTO ==========")
+  console.log("[v0] URL Completa:", window.location.href)
+  console.log("[v0] Pathname:", window.location.pathname)
+  console.log("[v0] Search:", window.location.search)
+  console.log("[v0] Hash:", window.location.hash)
+
   let nome = null
 
-  // Tentar obter do pathname (GitHub Pages: /repo/index.html?natal/amanda)
   const pathname = window.location.pathname
   const search = window.location.search
   const hash = window.location.hash
@@ -161,29 +166,40 @@ function rotear() {
   // Verificar no search/query string (ex: ?natal/amanda)
   if (search.includes("natal/")) {
     nome = search.split("natal/")[1]?.split("&")[0]
+    console.log("[v0] Nome encontrado no SEARCH:", nome)
   }
   // Verificar no hash (ex: #natal/amanda)
   else if (hash.includes("natal/")) {
     nome = hash.split("natal/")[1]?.split("&")[0]
+    console.log("[v0] Nome encontrado no HASH:", nome)
   }
   // Verificar no pathname (ex: /natal/amanda ou /repo/natal/amanda)
   else if (pathname.includes("natal/")) {
     nome = pathname.split("natal/")[1]
+    console.log("[v0] Nome encontrado no PATHNAME:", nome)
   }
 
   if (nome) {
     nome = nome.trim()
-    console.log("[v0] Nome extraído da URL (original):", nome)
+    console.log("[v0] Nome após trim:", nome)
     console.log("[v0] Nome normalizado:", normalizarNome(nome))
   }
 
-  console.log("[v0] Rota detectada - pathname:", pathname, "search:", search, "hash:", hash)
+  console.log("[v0] ========== VALIDANDO NO SORTEIO ==========")
+  console.log("[v0] Nomes disponíveis:", Object.keys(sorteio))
+  console.log(
+    "[v0] Nomes normalizados:",
+    Object.keys(sorteio).map((chave) => normalizarNome(chave)),
+  )
 
   if (nome) {
     renderizarPaginaResultado(nome)
   } else {
+    console.log("[v0] Nenhum nome encontrado - renderizando página principal")
     renderizarPaginaPrincipal()
   }
+
+  console.log("[v0] ========== FIM ROTEAMENTO ==========")
 }
 
 // Inicializar
