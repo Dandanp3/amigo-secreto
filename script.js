@@ -10,7 +10,7 @@ const sorteio = {
   marcos: "Nadinho",
   zeza: "Julia",
   samuel: "Andressa",
-  Elis: "Mayara",
+  elis: "Mayara",
   nadinho: "Allyson",
   xande: "Daniel",
   malu: "Cicera",
