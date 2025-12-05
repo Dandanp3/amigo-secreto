@@ -6,18 +6,18 @@ const sorteio = {
   sandro: "Lucas",
   mayara: "Malu",
   milson: "Amanda",
-  júlia: "Lili",
+  julia: "Elis",
   marcos: "Nadinho",
-  zeza: "Júlia",
+  zeza: "Julia",
   samuel: "Andressa",
-  lili: "Mayara",
+  Elis: "Mayara",
   nadinho: "Allyson",
   xande: "Daniel",
-  malu: "Cícera",
-  cícera: "Xande",
+  malu: "Cicera",
+  cicera: "Xande",
   andressa: "Sandro",
-  amanda: "Alícia",
-  alícia: "Jeane",
+  amanda: "Alicia",
+  alicia: "Jeane",
   allyson: "Marcos",
 }
 
@@ -86,27 +86,16 @@ function renderizarPaginaPrincipal() {
 }
 
 function renderizarPaginaResultado(nome) {
-  const nomeNormalizado = normalizarNome(nome)
-  const pessoa = Object.keys(sorteio).find((chave) => normalizarNome(chave) === nomeNormalizado)
-
-  console.log("[v0] ========== DEBUG ROTEAMENTO ==========")
-  console.log("[v0] Nome original da URL:", nome)
-  console.log("[v0] Nome normalizado:", nomeNormalizado)
-  console.log(
-    "[v0] Chaves disponíveis normalizadas:",
-    Object.keys(sorteio).map((chave) => normalizarNome(chave)),
-  )
-  console.log("[v0] Pessoa encontrada:", pessoa)
-  console.log("[v0] =====================================")
+  const pessoa = sorteio[nome]
 
   if (!pessoa) {
     renderizarErro()
     return
   }
 
-  const tirou = sorteio[pessoa]
+  const tirou = pessoa
   const frase = frases[Math.floor(Math.random() * frases.length)]
-  const nomePessoa = pessoa.charAt(0).toUpperCase() + pessoa.slice(1)
+  const nomePessoa = nome.charAt(0).toUpperCase() + nome.slice(1)
 
   const container = document.querySelector(".container")
   container.innerHTML = `
@@ -151,12 +140,6 @@ function renderizarErro() {
 }
 
 function rotear() {
-  console.log("[v0] ========== INICIANDO ROTEAMENTO ==========")
-  console.log("[v0] URL Completa:", window.location.href)
-  console.log("[v0] Pathname:", window.location.pathname)
-  console.log("[v0] Search:", window.location.search)
-  console.log("[v0] Hash:", window.location.hash)
-
   let nome = null
 
   const pathname = window.location.pathname
@@ -165,41 +148,23 @@ function rotear() {
 
   // Verificar no search/query string (ex: ?natal/amanda)
   if (search.includes("natal/")) {
-    nome = search.split("natal/")[1]?.split("&")[0]
-    console.log("[v0] Nome encontrado no SEARCH:", nome)
+    nome = search.split("natal/")[1]?.split("&")[0]?.toLowerCase()
   }
   // Verificar no hash (ex: #natal/amanda)
   else if (hash.includes("natal/")) {
-    nome = hash.split("natal/")[1]?.split("&")[0]
-    console.log("[v0] Nome encontrado no HASH:", nome)
+    nome = hash.split("natal/")[1]?.split("&")[0]?.toLowerCase()
   }
   // Verificar no pathname (ex: /natal/amanda ou /repo/natal/amanda)
   else if (pathname.includes("natal/")) {
-    nome = pathname.split("natal/")[1]
-    console.log("[v0] Nome encontrado no PATHNAME:", nome)
+    nome = pathname.split("natal/")[1]?.toLowerCase()
   }
 
   if (nome) {
     nome = nome.trim()
-    console.log("[v0] Nome após trim:", nome)
-    console.log("[v0] Nome normalizado:", normalizarNome(nome))
-  }
-
-  console.log("[v0] ========== VALIDANDO NO SORTEIO ==========")
-  console.log("[v0] Nomes disponíveis:", Object.keys(sorteio))
-  console.log(
-    "[v0] Nomes normalizados:",
-    Object.keys(sorteio).map((chave) => normalizarNome(chave)),
-  )
-
-  if (nome) {
     renderizarPaginaResultado(nome)
   } else {
-    console.log("[v0] Nenhum nome encontrado - renderizando página principal")
     renderizarPaginaPrincipal()
   }
-
-  console.log("[v0] ========== FIM ROTEAMENTO ==========")
 }
 
 // Inicializar
